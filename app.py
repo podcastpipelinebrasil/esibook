@@ -530,13 +530,13 @@ st.caption("LabBook module · One entry per compound")
 # ── 1. Identification ────────────────────────────────────────────────────────
 with st.expander("1 · Identification (from Reaction Setup)", expanded=True):
     c1, c2, c3 = st.columns(3)
-    D["id"]["compound_name"] = c1.text_input("Compound name", D["id"]["compound_name"])
-    D["id"]["compound_code"] = c2.text_input("Compound code", D["id"]["compound_code"])
-    D["id"]["reaction_ref"] = c3.text_input("Reaction ref.", D["id"]["reaction_ref"])
+    D["id"]["compound_name"] = c1.text_input("Compound name", D["id"]["compound_name"], key="id_name")
+    D["id"]["compound_code"] = c2.text_input("Compound code", D["id"]["compound_code"], key="id_code")
+    D["id"]["reaction_ref"] = c3.text_input("Reaction ref.", D["id"]["reaction_ref"], key="id_ref")
     c4, c5, c6 = st.columns(3)
-    D["id"]["analyst"] = c4.text_input("Analyst", D["id"]["analyst"])
-    D["id"]["date"] = c5.text_input("Date", D["id"]["date"])
-    D["id"]["smiles"] = c6.text_input("SMILES", D["id"]["smiles"])
+    D["id"]["analyst"] = c4.text_input("Analyst", D["id"]["analyst"], key="id_analyst")
+    D["id"]["date"] = c5.text_input("Date", D["id"]["date"], key="id_date")
+    D["id"]["smiles"] = c6.text_input("SMILES", D["id"]["smiles"], key="id_smiles")
 
 # ── 2. NMR ───────────────────────────────────────────────────────────────────
 with st.expander("2 · NMR Spectroscopy", expanded=True):
@@ -622,7 +622,7 @@ with st.expander("3 · Infrared Spectroscopy (IR)"):
             fig.update_xaxes(autorange="reversed")  # IR convention: high→low
             st.plotly_chart(fig, use_container_width=True)
             st.success(f"Detected bands (cm⁻¹): {', '.join(str(b) for b in ir['detected_bands'])}")
-    ir["bands"] = st.text_input("Main bands (cm⁻¹) + assignments", ir["bands"],
+    ir["bands"] = st.text_input("Main bands (cm⁻¹) + assignments", ir["bands"], key="ir_bands",
                                 placeholder="3420 (O–H), 1735 (C=O ester), 1250 (C–O)")
     ir["notes"] = st.text_area("Notes", ir["notes"], key="ir_notes", height=68)
 
@@ -630,11 +630,11 @@ with st.expander("3 · Infrared Spectroscopy (IR)"):
 with st.expander("4 · Gas Chromatography (GC)"):
     gc = D["gc"]
     c1, c2 = st.columns(2)
-    gc["column"] = c1.text_input("Column", gc["column"], placeholder="HP-5, 30 m × 0.25 mm")
-    gc["temp"] = c2.text_input("Temperature program", gc["temp"], placeholder="60→280 °C, 10 °C/min")
+    gc["column"] = c1.text_input("Column", gc["column"], key="gc_col", placeholder="HP-5, 30 m × 0.25 mm")
+    gc["temp"] = c2.text_input("Temperature program", gc["temp"], key="gc_temp", placeholder="60→280 °C, 10 °C/min")
     c3, c4 = st.columns(2)
-    gc["carrier"] = c3.text_input("Carrier gas", gc["carrier"], placeholder="He, 1.0 mL/min")
-    gc["rt"] = c4.text_input("Rt (min)", gc["rt"], placeholder="12.4")
+    gc["carrier"] = c3.text_input("Carrier gas", gc["carrier"], key="gc_carrier", placeholder="He, 1.0 mL/min")
+    gc["rt"] = c4.text_input("Rt (min)", gc["rt"], key="gc_rt", placeholder="12.4")
     gc_pdf = st.file_uploader("Attach GC trace (PDF)", type="pdf", key="gc_pdf")
     if gc_pdf:
         gc["pdf"] = gc_pdf.name
@@ -658,11 +658,11 @@ with st.expander("4 · Gas Chromatography (GC)"):
 with st.expander("5 · GC-MS"):
     gcms = D["gcms"]
     c1, c2 = st.columns(2)
-    gcms["column"] = c1.text_input("Column", gcms["column"], placeholder="HP-5MS, 30 m")
-    gcms["temp"] = c2.text_input("Temperature program", gcms["temp"], placeholder="60→280 °C")
+    gcms["column"] = c1.text_input("Column", gcms["column"], key="gcms_col", placeholder="HP-5MS, 30 m")
+    gcms["temp"] = c2.text_input("Temperature program", gcms["temp"], key="gcms_temp", placeholder="60→280 °C")
     c3, c4 = st.columns(2)
-    gcms["rt"] = c3.text_input("Rt (min)", gcms["rt"], placeholder="12.4")
-    gcms["ions"] = c4.text_input("Main m/z ions", gcms["ions"], placeholder="132 (M⁺), 101, 87")
+    gcms["rt"] = c3.text_input("Rt (min)", gcms["rt"], key="gcms_rt", placeholder="12.4")
+    gcms["ions"] = c4.text_input("Main m/z ions", gcms["ions"], key="gcms_ions", placeholder="132 (M⁺), 101, 87")
     gcms_pdf = st.file_uploader("Attach GC-MS (PDF)", type="pdf", key="gcms_pdf")
     if gcms_pdf:
         gcms["pdf"] = gcms_pdf.name
@@ -672,12 +672,12 @@ with st.expander("5 · GC-MS"):
 with st.expander("6 · HPLC"):
     hplc = D["hplc"]
     c1, c2 = st.columns(2)
-    hplc["column"] = c1.text_input("Column", hplc["column"], placeholder="Chiralpak IA, 250 × 4.6 mm")
-    hplc["mobile"] = c2.text_input("Mobile phase", hplc["mobile"], placeholder="Hex/iPrOH 95:5")
+    hplc["column"] = c1.text_input("Column", hplc["column"], key="hplc_col", placeholder="Chiralpak IA, 250 × 4.6 mm")
+    hplc["mobile"] = c2.text_input("Mobile phase", hplc["mobile"], key="hplc_mobile", placeholder="Hex/iPrOH 95:5")
     c3, c4, c5 = st.columns(3)
-    hplc["uv"] = c3.text_input("UV λ (nm)", hplc["uv"], placeholder="254")
-    hplc["rt"] = c4.text_input("Rt (min)", hplc["rt"], placeholder="8.2 / 11.5")
-    hplc["ee"] = c5.text_input("ee (%)", hplc["ee"], placeholder="98")
+    hplc["uv"] = c3.text_input("UV λ (nm)", hplc["uv"], key="hplc_uv", placeholder="254")
+    hplc["rt"] = c4.text_input("Rt (min)", hplc["rt"], key="hplc_rt", placeholder="8.2 / 11.5")
+    hplc["ee"] = c5.text_input("ee (%)", hplc["ee"], key="hplc_ee", placeholder="98")
     hplc_pdf = st.file_uploader("Attach HPLC trace (PDF)", type="pdf", key="hplc_pdf")
     if hplc_pdf:
         hplc["pdf"] = hplc_pdf.name
@@ -703,9 +703,9 @@ with st.expander("7 · High-Resolution Mass Spectrometry (HRMS)"):
     c1, c2, c3, c4 = st.columns(4)
     hrms["technique"] = c1.selectbox("Ionization", ion_opts,
                                      index=ion_opts.index(hrms["technique"]))
-    hrms["formula"] = c2.text_input("Molecular formula", hrms["formula"], placeholder="C₅H₁₀O₃")
-    hrms["calc"] = c3.text_input("Calcd. m/z", hrms["calc"], placeholder="119.0708")
-    hrms["found"] = c4.text_input("Found m/z", hrms["found"], placeholder="119.0711")
+    hrms["formula"] = c2.text_input("Molecular formula", hrms["formula"], key="hrms_formula", placeholder="C₅H₁₀O₃")
+    hrms["calc"] = c3.text_input("Calcd. m/z", hrms["calc"], key="hrms_calc", placeholder="119.0708")
+    hrms["found"] = c4.text_input("Found m/z", hrms["found"], key="hrms_found", placeholder="119.0711")
     hrms_pdf = st.file_uploader("Attach HRMS (PDF)", type="pdf", key="hrms_pdf")
     if hrms_pdf:
         hrms["pdf"] = hrms_pdf.name
@@ -715,18 +715,18 @@ with st.expander("7 · High-Resolution Mass Spectrometry (HRMS)"):
 with st.expander("8 · Physical Properties"):
     st.markdown("**Melting Point**")
     c1, c2 = st.columns(2)
-    D["mp"]["value"] = c1.text_input("Value (°C)", D["mp"]["value"], placeholder="82–84")
-    D["mp"]["lit"] = c2.text_input("Literature (°C)", D["mp"]["lit"], placeholder="83 (ref)")
+    D["mp"]["value"] = c1.text_input("Value (°C)", D["mp"]["value"], key="mp_val", placeholder="82–84")
+    D["mp"]["lit"] = c2.text_input("Literature (°C)", D["mp"]["lit"], key="mp_lit", placeholder="83 (ref)")
     st.markdown("**Optical Rotation [α]D**")
     c3, c4, c5, c6 = st.columns(4)
-    D["optrot"]["alpha"] = c3.text_input("[α]D", D["optrot"]["alpha"], placeholder="+23.4")
-    D["optrot"]["conc"] = c4.text_input("c (g/100 mL)", D["optrot"]["conc"], placeholder="1.0")
-    D["optrot"]["solvent"] = c5.text_input("Solvent", D["optrot"]["solvent"], placeholder="CHCl₃")
-    D["optrot"]["temp"] = c6.text_input("Temp. (°C)", D["optrot"]["temp"])
+    D["optrot"]["alpha"] = c3.text_input("[α]D", D["optrot"]["alpha"], key="or_alpha", placeholder="+23.4")
+    D["optrot"]["conc"] = c4.text_input("c (g/100 mL)", D["optrot"]["conc"], key="or_conc", placeholder="1.0")
+    D["optrot"]["solvent"] = c5.text_input("Solvent", D["optrot"]["solvent"], key="or_solvent", placeholder="CHCl₃")
+    D["optrot"]["temp"] = c6.text_input("Temp. (°C)", D["optrot"]["temp"], key="or_temp")
     st.markdown("**Refractive Index**")
     c7, c8 = st.columns(2)
-    D["ri"]["value"] = c7.text_input("nD", D["ri"]["value"], placeholder="1.4231")
-    D["ri"]["temp"] = c8.text_input("Temp. (°C)", D["ri"]["temp"])
+    D["ri"]["value"] = c7.text_input("nD", D["ri"]["value"], key="ri_val", placeholder="1.4231")
+    D["ri"]["temp"] = c8.text_input("Temp. (°C)", D["ri"]["temp"], key="ri_temp")
 
 # ── 9. Elemental analysis ────────────────────────────────────────────────────
 with st.expander("9 · Elemental Analysis"):
@@ -762,7 +762,7 @@ with st.expander("10 · Thermal Analysis & XRD"):
             st.plotly_chart(fig, use_container_width=True)
             st.success(f"Detected onset of degradation ≈ {tga['detected_onset']} °C "
                        "(at max mass-loss rate)")
-    tga["onset"] = st.text_input("Onset of degradation (°C)", tga["onset"],
+    tga["onset"] = st.text_input("Onset of degradation (°C)", tga["onset"], key="tga_onset",
                                  placeholder=tga["detected_onset"] or "220")
     tga["notes"] = st.text_area("TGA notes", tga["notes"], key="tga_notes", height=68)
 
@@ -771,9 +771,9 @@ with st.expander("10 · Thermal Analysis & XRD"):
     st.markdown("### DSC")
     dsc = D["dsc"]
     c1, c2, c3 = st.columns(3)
-    dsc["onset"] = c1.text_input("Onset (°C)", dsc["onset"], placeholder="78.2")
-    dsc["peak"] = c2.text_input("Peak (°C)", dsc["peak"], placeholder="83.1")
-    dsc["enthalpy"] = c3.text_input("ΔH (J/g)", dsc["enthalpy"], placeholder="142.3")
+    dsc["onset"] = c1.text_input("Onset (°C)", dsc["onset"], key="dsc_onset", placeholder="78.2")
+    dsc["peak"] = c2.text_input("Peak (°C)", dsc["peak"], key="dsc_peak", placeholder="83.1")
+    dsc["enthalpy"] = c3.text_input("ΔH (J/g)", dsc["enthalpy"], key="dsc_enthalpy", placeholder="142.3")
     dsc_pdf = st.file_uploader("Attach DSC (PDF)", type="pdf", key="dsc_pdf")
     if dsc_pdf:
         dsc["pdf"] = dsc_pdf.name
@@ -782,7 +782,7 @@ with st.expander("10 · Thermal Analysis & XRD"):
     # XRD
     st.markdown("### X-ray Diffraction (XRD)")
     xrd = D["xrd"]
-    xrd["wavelength"] = st.text_input("Wavelength λ (Å)", xrd["wavelength"],
+    xrd["wavelength"] = st.text_input("Wavelength λ (Å)", xrd["wavelength"], key="xrd_wl",
                                       help="Cu Kα = 1.5406 Å (default)")
     drx_file = st.file_uploader("Upload XRD raw data (.txt, Rigaku)", type="txt", key="drx_txt")
     if drx_file:
